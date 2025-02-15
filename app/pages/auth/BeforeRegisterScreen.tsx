@@ -85,10 +85,12 @@ const BeforeRegisterScreen: React.FC<Props> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
+    
     flex: 1,
     backgroundColor: '#F0FFF9',
   },
   header: {
+    marginTop:20,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -118,31 +120,31 @@ const styles = StyleSheet.create({
   },
   languageText: {
     color: '#00A67E',
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '500',
   },
   content: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingTop: 50,
+    paddingTop: 30,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#333333',
     marginBottom: 8,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
     color: '#00A67E',
     marginBottom: 24,
   },
   categoriesContainer: {
     flex: 1,
-    gap: 16,
+    gap: 10,
   },
   categoryCard: {
-    height: 220,
+    height: 180,
     borderRadius: 12,
     overflow: 'hidden',
     marginBottom: 10,
@@ -151,7 +153,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     justifyContent: 'center',
-    padding: 20,
+    padding: 10,
   },
   categoryImageStyle: {
     borderRadius: 12,
@@ -169,14 +171,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 20,
+    marginBottom: 20,
   },
   loginText: {
     color: '#666666',
-    fontSize: 14,
+    fontSize: 22,
   },
   loginLink: {
     color: '#00A67E',
-    fontSize: 14,
+    fontSize: 20,
     fontWeight: '500',
   },
 });

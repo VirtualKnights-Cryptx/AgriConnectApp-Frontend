@@ -16,7 +16,7 @@ const NewStack = () => {
         
         <Stack.Navigator id={undefined} screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Splash" component={App} />
-            <Stack.Screen name="Register" component={FarmerRegisterScreen} />
+            <Stack.Screen name="FarmerRegister" component={FarmerRegisterScreen} />
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Email" component={Email} />
             <Stack.Screen name="Otp" component={Otp} />

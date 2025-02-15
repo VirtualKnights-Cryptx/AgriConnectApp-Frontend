@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 type RootStackParamList = {
   Dashboard: undefined;
   MyField: undefined;
+  Tools: undefined;
   Marketplace: undefined;
   Account: undefined;
 };
@@ -28,6 +29,7 @@ const PlaceholderScreen: React.FC<PlaceholderScreenProps> = ({ screenName }) => 
 );
 
 const MyFieldScreen: React.FC = () => <PlaceholderScreen screenName="My Field" />;
+const ToolsScreen: React.FC = () => <PlaceholderScreen screenName="Tools" />;
 const MarketplaceScreen: React.FC = () => <PlaceholderScreen screenName="Marketplace" />;
 const AccountScreen: React.FC = () => <PlaceholderScreen screenName="Account" />;
 
@@ -39,7 +41,7 @@ const MenuBar: React.FC = () => {
       id={undefined}
       screenOptions={{
         tabBarStyle: styles.tabBarStyle,
-        tabBarActiveTintColor: '#0F8B8D',
+        tabBarActiveTintColor: '#00A67E', // Green color from the image
         tabBarInactiveTintColor: '#666',
         headerShown: false,
         tabBarShowLabel: true,
@@ -51,7 +53,7 @@ const MenuBar: React.FC = () => {
         component={Dashboard} 
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="stats-chart" size={24} color={color} />
+            <Ionicons name="trending-up" size={24} color={color} />
           ),
         }}
       />
@@ -61,9 +63,19 @@ const MenuBar: React.FC = () => {
         component={MyFieldScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="location" size={24} color={color} />
+            <Ionicons name="location-outline" size={24} color={color} />
           ),
           tabBarLabel: 'My Field'
+        }}
+      />
+
+      <Tab.Screen 
+        name="Tools" 
+        component={ToolsScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="settings-outline" size={24} color={color} />
+          ),
         }}
       />
       
@@ -72,7 +84,7 @@ const MenuBar: React.FC = () => {
         component={MarketplaceScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="cart" size={24} color={color} />
+            <Ionicons name="cart-outline" size={24} color={color} />
           ),
         }}
       />
@@ -82,7 +94,7 @@ const MenuBar: React.FC = () => {
         component={AccountScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" size={24} color={color} />
+            <Ionicons name="person-outline" size={24} color={color} />
           ),
         }}
       />
@@ -92,7 +104,7 @@ const MenuBar: React.FC = () => {
 
 const styles = StyleSheet.create({
   tabBarStyle: {
-    height: 60,
+    height: 80,
     backgroundColor: '#fff',
     borderTopWidth: 1,
     borderTopColor: '#eee',

@@ -169,6 +169,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0FFF9',
   },
   header: {
+    marginTop:30,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -244,7 +245,7 @@ const styles = StyleSheet.create({
   },
   registerButtonText: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: '600',
   },
   loginContainer: {
@@ -255,12 +256,14 @@ const styles = StyleSheet.create({
   },
   loginText: {
     color: '#666666',
-    fontSize: 14,
+    fontSize: 18,
+    marginBottom: 20,
   },
   loginLink: {
     color: '#00A67E',
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: '500',
+    marginBottom: 20,
   },
 });
 

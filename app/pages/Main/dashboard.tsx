@@ -68,7 +68,7 @@ const Dashboard = () => {
       <View style={styles.fieldSelector}>
         <TouchableOpacity style={styles.selectorButton}>
           <Text style={styles.selectorText}>Select Your Field</Text>
-          <Ionicons name="chevron-down-outline" size={20} color="#666" />
+          <Ionicons name="chevron-down-outline" size={30} color="#666" />
         </TouchableOpacity>
       </View>
 
@@ -98,17 +98,19 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   header: {
+    marginTop: 50,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 24,
   },
   greeting: {
-    fontSize: 16,
+    fontSize: 19,
     color: '#666',
+    marginBottom: 8,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
     color: '#0F8B8D',
   },
@@ -123,9 +125,10 @@ const styles = StyleSheet.create({
   languageText: {
     color: '#0F8B8D',
     fontWeight: '500',
+    fontSize: 16,
   },
   fieldSelector: {
-    marginBottom: 24,
+    marginBottom: 35,
   },
   selectorButton: {
     flexDirection: 'row',
@@ -142,7 +145,7 @@ const styles = StyleSheet.create({
   },
   selectorText: {
     color: '#666',
-    fontSize: 16,
+    fontSize: 20,
   },
   metricsGrid: {
     flexDirection: 'row',
@@ -166,7 +169,7 @@ const styles = StyleSheet.create({
   },
   metricTitle: {
     color: '#666',
-    fontSize: 14,
+    fontSize: 25,
     marginBottom: 4,
   },
   metricValue: {
@@ -195,12 +198,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   revenueTitle: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
   },
   revenueSubtitle: {
-    fontSize: 14,
+    fontSize: 18,
     color: '#666',
     marginTop: 2,
   },

@@ -124,6 +124,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   header: {
+    marginTop:30,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -216,11 +217,11 @@ const styles = StyleSheet.create({
   },
   registerText: {
     color: '#666666',
-    fontSize: 14,
+    fontSize: 18,
   },
   registerLink: {
     color: '#00A67E',
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: '500',
   },
 });
