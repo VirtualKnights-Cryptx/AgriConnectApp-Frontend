@@ -7,7 +7,8 @@ import {
   TextInput,
   SafeAreaView,
   ScrollView,
-  Platform
+  Platform,
+  Alert
 } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Picker } from '@react-native-picker/picker';
@@ -26,6 +27,8 @@ interface FormData {
   postalCode: string;
   experienceLevel: string;
   insurancePreference: string;
+  email: string;     // Add this
+  password: string;
 }
 
 const FarmerRegisterScreen: React.FC<Props> = ({ navigation }) => {
@@ -39,12 +42,51 @@ const FarmerRegisterScreen: React.FC<Props> = ({ navigation }) => {
     postalCode: '',
     experienceLevel: '',
     insurancePreference: '',
+    email: '',     // Add this
+  password: '',
   });
 
-  const handleRegister = () => {
-    // Handle registration logic here
-    console.log(formData);
+  const handleRegister = async () => {
+    try {
+      // Validate required fields
+      if (!formData.email || !formData.password || !formData.fullName || !formData.contactNumber) {
+        Alert.alert('Error', 'Please fill in all required fields');
+        return;
+      }
+  
+      // Transform the data to match backend expectations
+      const transformedData = {
+        name: formData.fullName,
+        email: formData.email,        // Added email
+        phone: formData.contactNumber,
+        location: `${formData.address}, ${formData.district}, ${formData.province}, ${formData.postalCode}`,
+        password: formData.password   // Added password
+      };
+  
+      const response = await fetch('http://192.168.8.100:5000/farmer/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(transformedData),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        Alert.alert('Registration Successful', 'You have been registered successfully.');
+        navigation.navigate('Login');
+      } else {
+        const errorData = await response.json();
+        console.error(errorData);
+        Alert.alert('Registration Failed', errorData.message || 'An error occurred during registration.');
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Registration Failed', 'An error occurred during registration.');
+    }
   };
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -91,6 +133,24 @@ const FarmerRegisterScreen: React.FC<Props> = ({ navigation }) => {
             value={formData.address}
             onChangeText={(text) => setFormData({...formData, address: text})}
           />
+
+<View style={styles.section}>
+  <Text style={styles.sectionTitle}>Account Details *</Text>
+  <TextInput
+    style={styles.input}
+    placeholder="Email"
+    value={formData.email}
+    onChangeText={(text) => setFormData({...formData, email: text})}
+    keyboardType="email-address"
+  />
+  <TextInput
+    style={styles.input}
+    placeholder="Password"
+    value={formData.password}
+    onChangeText={(text) => setFormData({...formData, password: text})}
+    secureTextEntry
+  />
+</View>
           
           <View style={styles.pickerContainer}>
             <Picker

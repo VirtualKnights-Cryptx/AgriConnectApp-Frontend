@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
+import { Alert } from 'react-native';
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -20,22 +20,48 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
-    if (!email || !password) {
-      // Show error alert
-      return;
-    }
-    setLoading(true);
-    try {
-      // Handle login logic
-      navigation.navigate('MenuBar');
-    } catch (error) {
-      // Handle error
-    } finally {
-      setLoading(false);
-    }
-  };
 
+
+const handleLogin = async () => {
+  if (!email || !password) {
+    Alert.alert('Error', 'Please enter both email and password');
+    return;
+  }
+
+  setLoading(true);
+  try {
+    const response = await fetch('http://192.168.8.100:5000/farmer/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      // Store the authentication token or user data if needed
+      // For example, using AsyncStorage:
+      // await AsyncStorage.setItem('userToken', result.data.token);
+      
+      navigation.navigate('MenuBar');
+    } else {
+      Alert.alert('Error', result.error || 'Login failed');
+    }
+  } catch (error) {
+    Alert.alert(
+      'Error',
+      'Failed to connect to the server. Please check your internet connection.'
+    );
+    console.error('Login error:', error);
+  } finally {
+    setLoading(false);
+  }
+};
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);

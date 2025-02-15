@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import FieldSelector, { Field } from '../components/fieldSelection';
 
 interface FieldMetric {
   title: string;
@@ -22,8 +23,45 @@ const AnalyticsCard: React.FC<{ metric: FieldMetric }> = ({ metric }) => (
   </View>
 );
 
+interface DropdownProps {
+  selectedField: Field;
+  setSelectedField: (field: Field) => void;
+}
+
+const Dropdown: React.FC<DropdownProps> = ({ selectedField, setSelectedField }) => {
+  const [fields, setFields] = useState([] as Field[]);
+
+  return (
+    <SafeAreaView style={styles.container}>
+      {/* ... (header code) ... */}
+
+      <View style={styles.fieldSelector}>
+       
+      </View>
+
+      {/* ... (rest of your existing JSX) ... */}
+    </SafeAreaView>
+  );
+}
+
 const Dashboard = () => {
-  const [selectedField, setSelectedField] = useState<string>('');
+  const [selectedField, setSelectedField] = useState<Field | null>(null);
+  const [fields, setFields] = useState<Field[]>([]);
+  const [isFieldSelectorVisible, setFieldSelectorVisible] = useState(false);
+  
+  useEffect(() => {
+    fetchFields();
+  }, []);
+
+  const fetchFields = async () => {
+    try {
+      const response = await fetch('http://your-api-url/api/fields');
+      const data = await response.json();
+      setFields(data);
+    } catch (error) {
+      console.error('Error fetching fields:', error);
+    }
+  }; // Added missing closing brace here
 
   const metrics: FieldMetric[] = [
     {
@@ -66,11 +104,27 @@ const Dashboard = () => {
       </View>
 
       <View style={styles.fieldSelector}>
-        <TouchableOpacity style={styles.selectorButton}>
-          <Text style={styles.selectorText}>Select Your Field</Text>
+        <TouchableOpacity 
+          style={styles.selectorButton}
+          onPress={() => setFieldSelectorVisible(true)}
+        >
+          <Text style={styles.selectorText}>
+            {selectedField ? selectedField.name : 'Select Your Field'}
+          </Text>
           <Ionicons name="chevron-down-outline" size={30} color="#666" />
         </TouchableOpacity>
       </View>
+
+      <FieldSelector
+        selectedField={selectedField}
+        onSelectField={setSelectedField}
+        isVisible={isFieldSelectorVisible}
+        onClose={() => setFieldSelectorVisible(false)}
+        fields={fields}
+      />
+
+      {/* Commented out Dropdown component */}
+      {/* <Dropdown selectedField={selectedField} setSelectedField={setSelectedField} /> */}
 
       <View style={styles.metricsGrid}>
         {metrics.map((metric, index) => (
