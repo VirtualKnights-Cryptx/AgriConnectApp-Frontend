@@ -4,6 +4,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import Dashboard from './dashboard';
 import { Ionicons } from '@expo/vector-icons';
+import Tools from './tools';
+import MyField from './myfield';
+import Marketplace from './marketplace';
+import Account from './myaccount';
 
 // Type definitions
 type RootStackParamList = {
@@ -29,7 +33,7 @@ const PlaceholderScreen: React.FC<PlaceholderScreenProps> = ({ screenName }) => 
 );
 
 const MyFieldScreen: React.FC = () => <PlaceholderScreen screenName="My Field" />;
-const ToolsScreen: React.FC = () => <PlaceholderScreen screenName="Tools" />;
+const ToolsScreen: React.FC = () => <PlaceholderScreen screenName="Tools2" />;
 const MarketplaceScreen: React.FC = () => <PlaceholderScreen screenName="Marketplace" />;
 const AccountScreen: React.FC = () => <PlaceholderScreen screenName="Account" />;
 
@@ -60,7 +64,7 @@ const MenuBar: React.FC = () => {
       
       <Tab.Screen 
         name="MyField" 
-        component={MyFieldScreen}
+        component={MyField}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="location-outline" size={24} color={color} />
@@ -71,7 +75,7 @@ const MenuBar: React.FC = () => {
 
       <Tab.Screen 
         name="Tools" 
-        component={ToolsScreen}
+        component={Tools}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="settings-outline" size={24} color={color} />
@@ -81,7 +85,7 @@ const MenuBar: React.FC = () => {
       
       <Tab.Screen 
         name="Marketplace" 
-        component={MarketplaceScreen}
+        component={Marketplace}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="cart-outline" size={24} color={color} />
@@ -91,7 +95,7 @@ const MenuBar: React.FC = () => {
       
       <Tab.Screen 
         name="Account" 
-        component={AccountScreen}
+        component={Account}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="person-outline" size={24} color={color} />
