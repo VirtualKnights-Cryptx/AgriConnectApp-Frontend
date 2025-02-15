@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingTop: 30,
+    paddingTop: 50,
   },
   subtitle: {
     fontSize: 16,
@@ -142,10 +142,10 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   categoryCard: {
-    height: 120,
+    height: 220,
     borderRadius: 12,
     overflow: 'hidden',
-    marginBottom: 16,
+    marginBottom: 10,
   },
   categoryImage: {
     width: '100%',
