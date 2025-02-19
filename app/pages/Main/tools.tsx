@@ -8,6 +8,7 @@ import {
   StatusBar,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { NavigationProp } from '@react-navigation/native';
 
 interface ToolCardProps {
   title: string;
@@ -23,8 +24,11 @@ const ToolCard: React.FC<ToolCardProps> = ({ title, icon, onPress }) => (
     <Text style={styles.cardText}>{title}</Text>
   </TouchableOpacity>
 );
+interface ToolsProps {
+  navigation: NavigationProp<any>;
+}
 
-const Tools: React.FC = () => {
+const Tools: React.FC<ToolsProps> = ({ navigation }) => {
   const handleLanguageChange = () => {
     // Handle language change functionality
   };
@@ -54,7 +58,7 @@ const Tools: React.FC = () => {
             <ToolCard
               title="Crop Disease Analyzer"
               icon={<Ionicons name="scan-outline" size={28} color="#1A1A1A" />}
-              onPress={() => {}}
+              onPress={() => navigation.navigate('DiseaseAnalyzer')}
             />
             <ToolCard
               title="AI ChatBot"
