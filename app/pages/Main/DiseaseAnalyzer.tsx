@@ -7,16 +7,21 @@ import {
   Modal,
   StyleSheet,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
+
+const BACKEND_URL = "http://192.168.8.143:5000/predict";
 
 const DiseaseAnalyzer = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [plantType, setPlantType] = useState("");
   const [plantAge, setPlantAge] = useState("");
+  const [loading, setLoading] = useState(false);  
+  const [prediction, setPrediction] = useState(null);
 
   const pickImage = async (useCamera) => {
     setModalVisible(false);
@@ -35,6 +40,47 @@ const DiseaseAnalyzer = () => {
       setSelectedImage(result.assets[0].uri);
     }
   };
+
+  const analyzeImage = async () => {
+    if (!selectedImage || !plantType || !plantAge){
+      Alert.alert("Missing Data", "Please upload an image and fill all fields.");
+      location.reload();
+    }
+
+    setLoading(true);
+    setPrediction(null);
+
+    let formData = new FormData();
+    formData.append("image", {
+      uri: selectedImage,
+      name: "plant.jpg",
+      type: "image/jpeg",
+    });
+
+    formData.append("plant_type", plantType);
+    formData.append("plant_age", plantAge);
+
+    try{
+      console.log(formData);
+
+      let response = await fetch(BACKEND_URL, {
+        method: "POST",
+        body: formData,
+        headers: {
+        },
+      });
+      
+
+      let data = await response.json();
+      setPrediction(data);
+      console.log(data);
+    }catch(error){
+      console.log(error);
+      Alert.alert("Error", "An error occurred while analyzing the image.");
+    }
+
+    setLoading(false);
+  }; 
 
   return (
     <View style={styles.container}>
@@ -84,9 +130,20 @@ const DiseaseAnalyzer = () => {
       </View>
 
       {/* Analyse Button */}
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity onPress={analyzeImage} style={styles.button}>
         <Text style={styles.buttonText}>Analyse</Text>
       </TouchableOpacity>
+
+      {/* Prediction Result */}
+      {loading && <ActivityIndicator size={"large"} color={"#00A67E"} style={{marginTop: 20}} />}
+
+      {prediction && (
+        <View style={styles.resultBox}>
+          <Text style={styles.resultText}>Disease:{prediction.class}</Text>
+          <Text style={styles.resultText}>Confidence: {prediction.confidence}</Text>
+          <Text style={styles.resultText}>Instructoin: {prediction.instructions}</Text>
+        </View>
+      )}
 
       {/* Image Selection Modal */}
       <Modal visible={modalVisible} transparent animationType="slide">
@@ -207,6 +264,16 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
   },
+  resultBox: {
+    marginTop: 20, 
+    backgroundColor: "#E6F7F0", 
+    padding: 15, 
+    borderRadius: 8 
+  },
+  resultText: { 
+    fontSize: 16, 
+    color: "#1A1A1A", 
+  }
 });
 
 export default DiseaseAnalyzer;
