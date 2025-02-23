@@ -1,17 +1,134 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, TextInput } from 'react-native';
+import { 
+  View, 
+  Text, 
+  TouchableOpacity, 
+  SafeAreaView, 
+  StyleSheet, 
+  TextInput, 
+  Modal,
+  FlatList,
+  Dimensions 
+} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
 
 interface AddFieldDetailsScreenProps {
-  navigation: any; 
+  navigation: any;
+}
+
+interface FieldShape {
+  type: string;
+  component: JSX.Element;
+}
+
+interface DropdownOption {
+  label: string;
+  value: string;
 }
 
 const AddFieldDetailsScreen: React.FC<AddFieldDetailsScreenProps> = ({ navigation }) => {
   const [location, setLocation] = useState('');
-  const [fieldSize, setFieldSize] = useState('50-100 Acres');
-  const [soilType, setSoilType] = useState('Select');
-  const [crops, setCrops] = useState('Add Crops');
+  const [fieldSize, setFieldSize] = useState('Select Size');
+  const [soilType, setSoilType] = useState('Select Type');
+  const [crops, setCrops] = useState<string[]>([]);
+  const [currentShapeIndex, setCurrentShapeIndex] = useState(0);
+  
+  // Modal states
+  const [showSizeDropdown, setShowSizeDropdown] = useState(false);
+  const [showSoilDropdown, setShowSoilDropdown] = useState(false);
+  const [showCropModal, setShowCropModal] = useState(false);
+  const [newCrop, setNewCrop] = useState('');
+
+  const fieldSizes: DropdownOption[] = [
+    { label: '< 50 Acres', value: '< 50 Acres' },
+    { label: '50-100 Acres', value: '50-100 Acres' },
+    { label: '100-200 Acres', value: '100-200 Acres' },
+    { label: '200-500 Acres', value: '200-500 Acres' },
+    { label: '> 500 Acres', value: '> 500 Acres' },
+  ];
+
+  const soilTypes: DropdownOption[] = [
+    { label: 'Clay Soil', value: 'Clay' },
+    { label: 'Sandy Soil', value: 'Sandy' },
+    { label: 'Silt Soil', value: 'Silt' },
+    { label: 'Peat Soil', value: 'Peat' },
+    { label: 'Loam Soil', value: 'Loam' },
+    { label: 'Chalk Soil', value: 'Chalk' },
+  ];
+
+  const shapes: FieldShape[] = [
+    {
+      type: 'Rectangle',
+      component: <View style={[styles.shape, styles.rectangle]} />
+    },
+    {
+      type: 'Square',
+      component: <View style={[styles.shape, styles.square]} />
+    },
+    {
+      type: 'Other',
+      component: <View style={[styles.shape, styles.other]} />
+    }
+  ];
+
+  const handlePrevShape = () => {
+    setCurrentShapeIndex((prev) => (prev === 0 ? shapes.length - 1 : prev - 1));
+  };
+
+  const handleNextShape = () => {
+    setCurrentShapeIndex((prev) => (prev === shapes.length - 1 ? 0 : prev + 1));
+  };
+
+  const handleAddCrop = () => {
+    if (newCrop.trim()) {
+      setCrops([...crops, newCrop.trim()]);
+      setNewCrop('');
+      setShowCropModal(false);
+    }
+  };
+
+  const handleRemoveCrop = (cropToRemove: string) => {
+    setCrops(crops.filter(crop => crop !== cropToRemove));
+  };
+
+  const renderDropdownModal = (
+    visible: boolean,
+    onClose: () => void,
+    options: DropdownOption[],
+    onSelect: (value: string) => void
+  ) => (
+    <Modal
+      visible={visible}
+      transparent
+      animationType="slide"
+      onRequestClose={onClose}
+    >
+      <TouchableOpacity 
+        style={styles.modalOverlay} 
+        activeOpacity={1} 
+        onPress={onClose}
+      >
+        <View style={styles.dropdownModal}>
+          <FlatList
+            data={options}
+            keyExtractor={(item) => item.value}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={styles.dropdownItem}
+                onPress={() => {
+                  onSelect(item.value);
+                  onClose();
+                }}
+              >
+                <Text style={styles.dropdownItemText}>{item.label}</Text>
+              </TouchableOpacity>
+            )}
+          />
+        </View>
+      </TouchableOpacity>
+    </Modal>
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -45,14 +162,14 @@ const AddFieldDetailsScreen: React.FC<AddFieldDetailsScreenProps> = ({ navigatio
         <View style={styles.shapeContainer}>
           <Text style={styles.label}>Field Shape :</Text>
           <View style={styles.shapeSelector}>
-            <TouchableOpacity style={styles.shapeArrow}>
+            <TouchableOpacity style={styles.shapeArrow} onPress={handlePrevShape}>
               <Ionicons name="chevron-back" size={24} color="#666" />
             </TouchableOpacity>
             <View style={styles.shapePreview}>
-              <View style={styles.rectangleShape} />
-              <Text style={styles.shapeText}>Rectangle</Text>
+              {shapes[currentShapeIndex].component}
+              <Text style={styles.shapeText}>{shapes[currentShapeIndex].type}</Text>
             </View>
-            <TouchableOpacity style={styles.shapeArrow}>
+            <TouchableOpacity style={styles.shapeArrow} onPress={handleNextShape}>
               <Ionicons name="chevron-forward" size={24} color="#666" />
             </TouchableOpacity>
           </View>
@@ -60,13 +177,19 @@ const AddFieldDetailsScreen: React.FC<AddFieldDetailsScreenProps> = ({ navigatio
 
         {/* Field Size and Soil Type */}
         <View style={styles.rowContainer}>
-          <TouchableOpacity style={[styles.dropdown, { flex: 1, marginRight: 8 }]}>
+          <TouchableOpacity 
+            style={[styles.dropdown, { flex: 1, marginRight: 8 }]}
+            onPress={() => setShowSizeDropdown(true)}
+          >
             <Text style={styles.label}>Field Size:</Text>
             <Text style={styles.dropdownText}>{fieldSize}</Text>
             <Ionicons name="chevron-down" size={20} color="#666" />
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.dropdown, { flex: 1, marginLeft: 8 }]}>
+          <TouchableOpacity 
+            style={[styles.dropdown, { flex: 1, marginLeft: 8 }]}
+            onPress={() => setShowSoilDropdown(true)}
+          >
             <Text style={styles.label}>Soil Type:</Text>
             <Text style={styles.dropdownText}>{soilType}</Text>
             <Ionicons name="chevron-down" size={20} color="#666" />
@@ -74,25 +197,209 @@ const AddFieldDetailsScreen: React.FC<AddFieldDetailsScreenProps> = ({ navigatio
         </View>
 
         {/* Exists Crops */}
-        <TouchableOpacity style={styles.cropsButton}>
-          <Text style={styles.label}>Exists Crops:</Text>
-          <View style={styles.cropsContent}>
-            <Text style={styles.cropsText}>{crops}</Text>
-            <Ionicons name="add-circle-outline" size={24} color="#4BA586" />
+        <View style={styles.cropsButton}>
+          <Text style={styles.label}>Existing Crops:</Text>
+          <View style={styles.cropsList}>
+            {crops.map((crop, index) => (
+              <View key={index} style={styles.cropTag}>
+                <Text style={styles.cropTagText}>{crop}</Text>
+                <TouchableOpacity onPress={() => handleRemoveCrop(crop)}>
+                  <Ionicons name="close-circle" size={20} color="#666" />
+                </TouchableOpacity>
+              </View>
+            ))}
           </View>
-        </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.addCropButton}
+            onPress={() => setShowCropModal(true)}
+          >
+            <Text style={styles.addCropText}>Add Crop</Text>
+            <Ionicons name="add-circle-outline" size={24} color="#4BA586" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Add Field Button */}
       <TouchableOpacity style={styles.addButton}>
         <Text style={styles.addButtonText}>Add Field</Text>
       </TouchableOpacity>
+
+      {/* Dropdowns */}
+      {renderDropdownModal(
+        showSizeDropdown,
+        () => setShowSizeDropdown(false),
+        fieldSizes,
+        setFieldSize
+      )}
+
+      {renderDropdownModal(
+        showSoilDropdown,
+        () => setShowSoilDropdown(false),
+        soilTypes,
+        setSoilType
+      )}
+
+      {/* Add Crop Modal */}
+      <Modal
+        visible={showCropModal}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setShowCropModal(false)}
+      >
+        <TouchableOpacity 
+          style={styles.modalOverlay} 
+          activeOpacity={1} 
+          onPress={() => setShowCropModal(false)}
+        >
+          <View style={styles.cropModal}>
+            <Text style={styles.modalTitle}>Add New Crop</Text>
+            <TextInput
+              style={styles.cropInput}
+              placeholder="Enter crop name"
+              value={newCrop}
+              onChangeText={setNewCrop}
+            />
+            <View style={styles.modalButtons}>
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={() => setShowCropModal(false)}
+              >
+                <Text style={styles.cancelButtonText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={[styles.modalButton, styles.confirmButton]}
+                onPress={handleAddCrop}
+              >
+                <Text style={styles.confirmButtonText}>Add</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </SafeAreaView>
   );
 };
-
 const styles = StyleSheet.create({
-  container: {
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      dropdownModal: {
+        backgroundColor: 'white',
+        borderRadius: 12,
+        padding: 16,
+        width: '80%',
+        maxHeight: '50%',
+      },
+      dropdownItem: {
+        padding: 16,
+        borderBottomWidth: 1,
+        borderBottomColor: '#E8E8E8',
+      },
+      dropdownItemText: {
+        fontSize: 16,
+        color: '#333',
+      },
+      cropModal: {
+        backgroundColor: 'white',
+        borderRadius: 12,
+        padding: 20,
+        width: '80%',
+      },
+      modalTitle: {
+        fontSize: 18,
+        fontWeight: '600',
+        color: '#333',
+        marginBottom: 16,
+      },
+      cropInput: {
+        borderWidth: 1,
+        borderColor: '#E8E8E8',
+        borderRadius: 8,
+        padding: 12,
+        fontSize: 16,
+        marginBottom: 16,
+      },
+      modalButtons: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+      },
+      modalButton: {
+        padding: 12,
+        borderRadius: 8,
+        marginLeft: 12,
+      },
+      cancelButton: {
+        backgroundColor: '#E8E8E8',
+      },
+      confirmButton: {
+        backgroundColor: '#2D6A4F',
+      },
+      cancelButtonText: {
+        color: '#333',
+        fontSize: 16,
+      },
+      confirmButtonText: {
+        color: 'white',
+        fontSize: 16,
+      },
+      cropsList: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        marginTop: 8,
+        marginBottom: 12,
+      },
+      cropTag: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#E8F5F1',
+        borderRadius: 16,
+        padding: 8,
+        marginRight: 8,
+        marginBottom: 8,
+      },
+      cropTagText: {
+        color: '#2D6A4F',
+        marginRight: 4,
+      },
+      addCropButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 8,
+      },
+      addCropText: {
+        color: '#4BA586',
+        fontSize: 16,
+        marginRight: 8,
+      },
+    
+    shape: {
+        width: 100,
+        height: 60,
+        backgroundColor: '#2D6A4F',
+        marginBottom: 8,
+      },
+        rectangle: {
+            borderRadius: 8,
+            transform: [{rotate: '15deg'}],
+        },
+        square: {
+            borderRadius: 0,
+            transform: [{rotate: '45deg'}],
+            width: 80,
+            height: 80,
+        },
+        other: {
+            borderRadius: 12,
+            transform: [{rotate: '-15deg'}],
+            width: 120,
+            height: 80,
+
+        },
+    container: {
     flex: 1,
     backgroundColor: '#E8F5F1',
   },
@@ -206,6 +513,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
+  
 });
 
 export default AddFieldDetailsScreen;
