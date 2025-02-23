@@ -7,8 +7,17 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  Alert,
 } from 'react-native';
-import { AddHarvestFormData } from '../Main/types';
+
+export interface AddHarvestFormData {
+  fieldName: string;
+  quantity: string;
+  price: string;
+  description: string;
+  location: string;
+}
+
 interface AddHarvestModalProps {
   visible: boolean;
   onClose: () => void;
@@ -28,16 +37,29 @@ export const AddHarvestModal: React.FC<AddHarvestModalProps> = ({
     location: '',
   });
 
+  const validateForm = () => {
+    if (!formData.fieldName || !formData.quantity || !formData.price || !formData.location) {
+      Alert.alert('Error', 'Please fill in all required fields');
+      return false;
+    }
+    if (isNaN(Number(formData.price)) || isNaN(Number(formData.quantity))) {
+      Alert.alert('Error', 'Price and quantity must be valid numbers');
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = () => {
-    onSubmit(formData);
-    setFormData({
-      fieldName: '',
-      quantity: '',
-      price: '',
-      description: '',
-      location: '',
-    });
-    onClose();
+    if (validateForm()) {
+      onSubmit(formData);
+      setFormData({
+        fieldName: '',
+        quantity: '',
+        price: '',
+        description: '',
+        location: '',
+      });
+    }
   };
 
   return (
@@ -52,7 +74,7 @@ export const AddHarvestModal: React.FC<AddHarvestModalProps> = ({
           <Text style={styles.modalTitle}>Add Your Harvest</Text>
           
           <ScrollView style={styles.formContainer}>
-            <Text style={styles.label}>Field Name</Text>
+            <Text style={styles.label}>Field Name *</Text>
             <TextInput
               style={styles.input}
               value={formData.fieldName}
@@ -60,7 +82,7 @@ export const AddHarvestModal: React.FC<AddHarvestModalProps> = ({
               placeholder="Enter field name"
             />
 
-            <Text style={styles.label}>Quantity (kg)</Text>
+            <Text style={styles.label}>Quantity (kg) *</Text>
             <TextInput
               style={styles.input}
               value={formData.quantity}
@@ -69,7 +91,7 @@ export const AddHarvestModal: React.FC<AddHarvestModalProps> = ({
               keyboardType="numeric"
             />
 
-            <Text style={styles.label}>Price per kg (Rs.)</Text>
+            <Text style={styles.label}>Price per kg (Rs.) *</Text>
             <TextInput
               style={styles.input}
               value={formData.price}
@@ -88,7 +110,7 @@ export const AddHarvestModal: React.FC<AddHarvestModalProps> = ({
               numberOfLines={4}
             />
 
-            <Text style={styles.label}>Location</Text>
+            <Text style={styles.label}>Location *</Text>
             <TextInput
               style={styles.input}
               value={formData.location}
@@ -116,6 +138,7 @@ export const AddHarvestModal: React.FC<AddHarvestModalProps> = ({
     </Modal>
   );
 };
+
 
 const styles = StyleSheet.create({
   modalContainer: {

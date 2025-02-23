@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   View, 
   Text, 
@@ -6,42 +6,97 @@ import {
   StyleSheet, 
   SafeAreaView, 
   TouchableOpacity, 
-  ScrollView 
+  ScrollView,
+  Alert 
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { AddHarvestModal } from '../components/AddHarvestModal';
-import { CropItem, AddHarvestFormData } from './types';
-
-interface CropItemProps {
+import axios from 'axios';
+import { AddHarvestFormData } from './types';
+interface Harvest {
+  id: string;
+  fieldName: string;
+  quantity: number;
   price: number;
+  description: string;
   location: string;
-  farmer: string;
+  farmerName: string;
 }
 
-const CropItemComponent: React.FC<CropItemProps> = ({ price, location, farmer }) => (
+interface CropItemProps extends Harvest {
+  onBuy: () => void;
+}
+
+const CropItemComponent: React.FC<CropItemProps> = ({ 
+  fieldName, 
+  price, 
+  location, 
+  farmerName,
+  onBuy 
+}) => (
   <View style={styles.cropCard}>
     <Image 
       source={require('../../../assets/images/farmer.png')} 
       style={styles.cropImage}
     />
     <View style={styles.cropInfo}>
-      <Text style={styles.title}>Main Field</Text>
-      <Text style={styles.farmerName}>{farmer}</Text>
+      <Text style={styles.title}>{fieldName}</Text>
+      <Text style={styles.farmerName}>{farmerName}</Text>
       <Text style={styles.location}>{location}</Text>
       <Text style={styles.price}>Rs.{price}/1kg</Text>
     </View>
-    <TouchableOpacity style={styles.buyButton}>
+    <TouchableOpacity style={styles.buyButton} onPress={onBuy}>
       <Text style={styles.buyButtonText}>Buy</Text>
     </TouchableOpacity>
   </View>
 );
 
+const API_BASE_URL = 'http://192.168.8.100:3000/api/products';
+
 export default function MarketplaceScreen() {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [harvests, setHarvests] = useState<Harvest[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleAddHarvest = (data: AddHarvestFormData) => {
-    console.log('New harvest data:', data);
+  useEffect(() => {
+    fetchHarvests();
+  }, []);
 
+  const fetchHarvests = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/`);
+      setHarvests(response.data);
+    } catch (error) {
+      console.error('Error fetching harvests:', error);
+      Alert.alert('Error', 'Failed to load harvests');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAddHarvest = async (data: AddHarvestFormData) => {
+    try {
+      await axios.post(`${API_BASE_URL}/create`, data);
+      Alert.alert('Success', 'Harvest listed successfully');
+      fetchHarvests(); // Refresh the list
+      setIsModalVisible(false);
+    } catch (error) {
+      console.error('Error adding harvest:', error);
+      Alert.alert('Error', 'Failed to list harvest');
+    }
+  };
+
+  const handleBuyHarvest = async (harvestId: string) => {
+    try {
+      await axios.post(`${API_BASE_URL}/harvests/${harvestId}/buy`, {
+        quantity: 1 // You might want to add quantity selection
+      });
+      Alert.alert('Success', 'Purchase successful');
+      fetchHarvests(); // Refresh the list
+    } catch (error) {
+      console.error('Error buying harvest:', error);
+      Alert.alert('Error', 'Failed to complete purchase');
+    }
   };
 
   return (
@@ -73,16 +128,17 @@ export default function MarketplaceScreen() {
 
       {/* Crop Listings */}
       <ScrollView style={styles.cropList}>
-        <CropItemComponent 
-          price={25}
-          farmer="Nethmal Gunawardane"
-          location="Aluthgama"
-        />
-        <CropItemComponent 
-          price={25}
-          farmer="Nethmal Gunawardane"
-          location="Aluthgama"
-        />
+        {isLoading ? (
+          <Text style={styles.loadingText}>Loading harvests...</Text>
+        ) : (
+          harvests.map((harvest) => (
+            <CropItemComponent 
+              key={harvest.id}
+              {...harvest}
+              onBuy={() => handleBuyHarvest(harvest.id)}
+            />
+          ))
+        )}
       </ScrollView>
 
       {/* Sell Button */}
@@ -214,5 +270,10 @@ const styles = StyleSheet.create({
   sellButtonText: {
     color: 'white',
     fontWeight: '600',
+  },
+  loadingText: {
+    textAlign: 'center',
+    padding: 20,
+    color: '#666',
   },
 });
