@@ -51,7 +51,7 @@ const CropItemComponent: React.FC<CropItemProps> = ({
   </View>
 );
 
-const API_BASE_URL = 'http://192.168.8.100:3000/api/products';
+const API_BASE_URL = 'http://192.168.8.101:3000/api/products';
 
 export default function MarketplaceScreen() {
   const [isModalVisible, setIsModalVisible] = useState(false);

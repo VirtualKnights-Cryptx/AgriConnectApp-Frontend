@@ -44,7 +44,7 @@ const Dashboard = () => {
   const profiledata = async () => {
     try {
       const token = await AsyncStorage.getItem('userToken');
-      const response = await fetch('http://192.168.8.100:3000/api/auth/get', {
+      const response = await fetch('http://192.168.8.101:3000/api/auth/get', {
         headers: {
           Authorization: `Bearer ${token}`,
         },

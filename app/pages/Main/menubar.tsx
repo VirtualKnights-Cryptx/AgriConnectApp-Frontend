@@ -5,14 +5,14 @@ import { useNavigation } from '@react-navigation/native';
 import Dashboard from './dashboard';
 import { Ionicons } from '@expo/vector-icons';
 import Tools from './tools';
-import MyField from './myfield';
+import VirtualFieldsScreen from './myfield';
 import Marketplace from './marketplace';
 import Account from './myaccount';
 
 // Type definitions
 type RootStackParamList = {
   Dashboard: undefined;
-  MyField: undefined;
+  VirtualFieldsScreen: undefined;
   Tools: undefined;
   Marketplace: undefined;
   Account: undefined;
@@ -63,8 +63,8 @@ const MenuBar: React.FC = () => {
       />
       
       <Tab.Screen 
-        name="MyField" 
-        component={MyField}
+        name="VirtualFieldsScreen" 
+        component={VirtualFieldsScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="location-outline" size={24} color={color} />
