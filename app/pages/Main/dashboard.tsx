@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, RefreshControl, ScrollView, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import FieldSelector, { Field } from '../components/fieldSelection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useIsFocused } from '@react-navigation/native';
 interface FieldMetric {
   title: string;
   value: string | number;
@@ -35,10 +35,23 @@ const Dashboard = () => {
   const [isFieldSelectorVisible, setFieldSelectorVisible] = useState(false);
   const [profile, setProfile] = useState<Profile>({ name: '', email: '' });
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   
-  useEffect(() => {
-    fetchFields();
-    profiledata();
+
+  const isFocused = useIsFocused();
+
+   useEffect(() => {
+    if (isFocused) {
+      fetchFields();
+      profiledata();
+    }
+  }, [isFocused]);
+
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    Promise.all([fetchFields(), profiledata()])
+      .finally(() => setRefreshing(false));
   }, []);
 
   const profiledata = async () => {
@@ -66,7 +79,7 @@ const Dashboard = () => {
 
   const fetchFields = async () => {
     try {
-      const response = await fetch('http://your-api-url/api/fields');
+      const response = await fetch('http://192.168.8.101:3000/api/fields/');
       const data = await response.json();
       setFields(data);
     } catch (error) {
@@ -119,6 +132,14 @@ const Dashboard = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
+      }
+    >
       <View style={styles.header}>
         <View>
           <Text style={styles.greeting}>Hi! {profile.name},</Text>
@@ -165,9 +186,11 @@ const Dashboard = () => {
           <Ionicons name="chevron-forward-outline" size={24} color="#0F8B8D" />
         </View>
       </TouchableOpacity>
-    </SafeAreaView>
-  );
+    </ScrollView>
+  </SafeAreaView>
+);
 };
+
 
 const styles = StyleSheet.create({
   container: {

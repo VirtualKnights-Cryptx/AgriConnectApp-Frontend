@@ -8,13 +8,20 @@ import {
   TextInput, 
   Modal,
   FlatList,
-  Dimensions 
+  ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
 
-interface AddFieldDetailsScreenProps {
-  navigation: any;
+// Types
+interface Field {
+  name: string;
+  location: string;
+  shape: string;
+  size: string;
+  soilType: string;
+  crops: string[];
 }
 
 interface FieldShape {
@@ -27,19 +34,51 @@ interface DropdownOption {
   value: string;
 }
 
+interface AddFieldDetailsScreenProps {
+  navigation: any;
+}
+
+// API Configuration
+const API_BASE_URL = 'http://192.168.8.101:3000'; // Replace with your actual API URL
+
+// API Service
+const fieldService = {
+  async createField(field: Field): Promise<{ success: boolean; message: string }> {
+    const response = await fetch(`${API_BASE_URL}/api/fields/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(field),
+    });
+    
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to create field');
+    }
+    
+    return data;
+  },
+};
+
 const AddFieldDetailsScreen: React.FC<AddFieldDetailsScreenProps> = ({ navigation }) => {
+  // State Management
+  const [fieldName, setFieldName] = useState('');
   const [location, setLocation] = useState('');
   const [fieldSize, setFieldSize] = useState('Select Size');
   const [soilType, setSoilType] = useState('Select Type');
   const [crops, setCrops] = useState<string[]>([]);
   const [currentShapeIndex, setCurrentShapeIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [newCrop, setNewCrop] = useState('');
   
-  // Modal states
+  // Modal States
   const [showSizeDropdown, setShowSizeDropdown] = useState(false);
   const [showSoilDropdown, setShowSoilDropdown] = useState(false);
   const [showCropModal, setShowCropModal] = useState(false);
-  const [newCrop, setNewCrop] = useState('');
 
+  // Options Data
   const fieldSizes: DropdownOption[] = [
     { label: '< 50 Acres', value: '< 50 Acres' },
     { label: '50-100 Acres', value: '50-100 Acres' },
@@ -72,6 +111,7 @@ const AddFieldDetailsScreen: React.FC<AddFieldDetailsScreenProps> = ({ navigatio
     }
   ];
 
+  // Handlers
   const handlePrevShape = () => {
     setCurrentShapeIndex((prev) => (prev === 0 ? shapes.length - 1 : prev - 1));
   };
@@ -92,6 +132,36 @@ const AddFieldDetailsScreen: React.FC<AddFieldDetailsScreenProps> = ({ navigatio
     setCrops(crops.filter(crop => crop !== cropToRemove));
   };
 
+  const handleAddField = async () => {
+    try {
+      if (!fieldName || !location || fieldSize === 'Select Size' || soilType === 'Select Type') {
+        Alert.alert('Error', 'Please fill in all required fields');
+        return;
+      }
+
+      setIsLoading(true);
+
+      const fieldData = {
+        name: fieldName,
+        location: location,
+        shape: shapes[currentShapeIndex].type,
+        size: fieldSize,
+        soilType: soilType,
+        crops: crops,
+      };
+
+      const result = await fieldService.createField(fieldData);
+      Alert.alert('Success', result.message);
+      navigation.goBack();
+    } catch (error) {
+      console.error('Error adding field:', error);
+      Alert.alert('Error', error instanceof Error ? error.message : 'Failed to add field');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Render Helpers
   const renderDropdownModal = (
     visible: boolean,
     onClose: () => void,
@@ -147,6 +217,17 @@ const AddFieldDetailsScreen: React.FC<AddFieldDetailsScreenProps> = ({ navigatio
 
       {/* Form Fields */}
       <View style={styles.formContainer}>
+        {/* Field Name Input */}
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Field Name"
+            value={fieldName}
+            onChangeText={setFieldName}
+          />
+          <Ionicons name="create-outline" size={20} color="#666" style={styles.inputIcon} />
+        </View>
+
         {/* Location Input */}
         <View style={styles.inputContainer}>
           <TextInput
@@ -160,7 +241,7 @@ const AddFieldDetailsScreen: React.FC<AddFieldDetailsScreenProps> = ({ navigatio
 
         {/* Field Shape Selector */}
         <View style={styles.shapeContainer}>
-          <Text style={styles.label}>Field Shape :</Text>
+          <Text style={styles.label}>Field Shape:</Text>
           <View style={styles.shapeSelector}>
             <TouchableOpacity style={styles.shapeArrow} onPress={handlePrevShape}>
               <Ionicons name="chevron-back" size={24} color="#666" />
@@ -196,7 +277,7 @@ const AddFieldDetailsScreen: React.FC<AddFieldDetailsScreenProps> = ({ navigatio
           </TouchableOpacity>
         </View>
 
-        {/* Exists Crops */}
+        {/* Crops Section */}
         <View style={styles.cropsButton}>
           <Text style={styles.label}>Existing Crops:</Text>
           <View style={styles.cropsList}>
@@ -220,11 +301,19 @@ const AddFieldDetailsScreen: React.FC<AddFieldDetailsScreenProps> = ({ navigatio
       </View>
 
       {/* Add Field Button */}
-      <TouchableOpacity style={styles.addButton}>
-        <Text style={styles.addButtonText}>Add Field</Text>
+      <TouchableOpacity 
+        style={[styles.addButton, isLoading && styles.disabledButton]}
+        onPress={handleAddField}
+        disabled={isLoading}
+      >
+        {isLoading ? (
+          <ActivityIndicator color="white" />
+        ) : (
+          <Text style={styles.addButtonText}>Add Field</Text>
+        )}
       </TouchableOpacity>
 
-      {/* Dropdowns */}
+      {/* Modals */}
       {renderDropdownModal(
         showSizeDropdown,
         () => setShowSizeDropdown(false),
@@ -279,7 +368,11 @@ const AddFieldDetailsScreen: React.FC<AddFieldDetailsScreenProps> = ({ navigatio
     </SafeAreaView>
   );
 };
+
 const styles = StyleSheet.create({
+    disabledButton: {
+        opacity: 0.7
+      },
     modalOverlay: {
         flex: 1,
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
