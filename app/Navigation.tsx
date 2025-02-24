@@ -10,6 +10,7 @@ import Password from './pages/otp/Password';
 import MenuBar from './pages/Main/menubar';
 import BeforeRegisterScreen from './pages/auth/BeforeRegisterScreen';
 import AddFieldDetailsScreen from './pages/Main/addfieldscreen';
+import FieldDetailsScreen from './pages/Main/fielddetailsscreen';
 const Stack = createStackNavigator();
 const NewStack = () => {
     return (
@@ -24,6 +25,7 @@ const NewStack = () => {
             <Stack.Screen name="MenuBar" component={MenuBar} />
             <Stack.Screen name="BeforeRegister" component={BeforeRegisterScreen} />
             <Stack.Screen name="AddFieldDetails" component={AddFieldDetailsScreen} />
+            <Stack.Screen name="FieldDetails" component={FieldDetailsScreen} />
         </Stack.Navigator>
       
     );  

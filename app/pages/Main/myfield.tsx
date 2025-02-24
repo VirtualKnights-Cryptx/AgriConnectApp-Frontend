@@ -60,7 +60,7 @@ const VirtualFieldsScreen: React.FC<VirtualFieldsScreenProps> = ({ navigation })
     <TouchableOpacity 
       key={field._id} 
       style={styles.fieldCard}
-      
+      onPress={() => navigation.navigate('FieldDetails', { field })}
     >
       <View style={styles.fieldHeader}>
         <Text style={styles.fieldName}>{field.name}</Text>
