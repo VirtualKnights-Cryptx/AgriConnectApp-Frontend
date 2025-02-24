@@ -11,6 +11,7 @@ import {
 import { StatusBar } from 'expo-status-bar';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -22,52 +23,53 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
 
 
-const handleLogin = async () => {
-  if (!email || !password) {
-    Alert.alert('Error', 'Please enter both email and password');
-    return;
-  }
-
-  setLoading(true);
-  try {
-    const response = await fetch('http://192.168.8.100:5000/farmer/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
-
-    const result = await response.json();
-
-    if (result.success) {
-      // Store the authentication token or user data if needed
-      // For example, using AsyncStorage:
-      // await AsyncStorage.setItem('userToken', result.data.token);
-      
-      navigation.navigate('MenuBar');
-    } else {
-      Alert.alert('Error', result.error || 'Login failed');
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please enter both email and password');
+      return;
     }
-  } catch (error) {
-    Alert.alert(
-      'Error',
-      'Failed to connect to the server. Please check your internet connection.'
-    );
-    console.error('Login error:', error);
-  } finally {
-    setLoading(false);
-  }
-};
+
+    setLoading(true);
+    try {
+      const response = await fetch('http://192.168.8.101:3000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) { // Check HTTP status first
+        // Store token
+        await AsyncStorage.setItem('userToken', result.token);
+        // Store user info
+        await AsyncStorage.setItem('userInfo', JSON.stringify(result.user));
+        
+        navigation.navigate('MenuBar');
+      } else {
+        // Handle specific error messages from backend
+        Alert.alert('Error', result.error || 'Login failed');
+      }
+    } catch (error) {
+      Alert.alert(
+        'Error',
+        'Failed to connect to the server. Please check your internet connection.'
+      );
+      console.error('Login error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const handleGoogleLogin = async () => {
     try {
-      setLoading(true);
+      
       // Handle Google login logic
-      navigation.navigate('MenuBar');
-    } catch (error) {
+     
       // Handle error
     } finally {
       setLoading(false);
@@ -116,12 +118,14 @@ const handleLogin = async () => {
         </TouchableOpacity>
 
         <TouchableOpacity 
-          style={styles.loginButton}
-          onPress={handleLogin}
-          disabled={loading}
-        >
-          <Text style={styles.loginButtonText}>Login</Text>
-        </TouchableOpacity>
+         style={[styles.loginButton, loading && styles.disabledButton]}
+            onPress={handleLogin}
+             disabled={loading}
+           >
+         <Text style={styles.loginButtonText}>
+           {loading ? 'Logging in...' : 'Login'}
+        </Text>
+       </TouchableOpacity>
 
         <Text style={styles.orText}>Or Continue With</Text>
 
@@ -249,6 +253,10 @@ const styles = StyleSheet.create({
     color: '#00A67E',
     fontSize: 18,
     fontWeight: '500',
+  },
+  disabledButton: {
+    opacity: 0.7,
+    backgroundColor: '#cccccc',
   },
 });
 

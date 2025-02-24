@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Picker } from '@react-native-picker/picker';
+import { Ionicons } from '@expo/vector-icons';
 
 interface Props {
   navigation: NativeStackNavigationProp<any>;
@@ -42,8 +43,8 @@ const FarmerRegisterScreen: React.FC<Props> = ({ navigation }) => {
     postalCode: '',
     experienceLevel: '',
     insurancePreference: '',
-    email: '',     // Add this
-  password: '',
+    email: '',     
+    password: '',
   });
 
   const handleRegister = async () => {
@@ -57,13 +58,15 @@ const FarmerRegisterScreen: React.FC<Props> = ({ navigation }) => {
       // Transform the data to match backend expectations
       const transformedData = {
         name: formData.fullName,
-        email: formData.email,        // Added email
+        email: formData.email,       
         phone: formData.contactNumber,
         location: `${formData.address}, ${formData.district}, ${formData.province}, ${formData.postalCode}`,
-        password: formData.password   // Added password
+        password: formData.password  ,  
+        insurancePreference: formData.insurancePreference,
+        experienceLevel: formData.experienceLevel,
       };
   
-      const response = await fetch('http://192.168.8.100:5000/farmer/register', {
+      const response = await fetch('http://192.168.8.101:3000/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -92,7 +95,7 @@ const FarmerRegisterScreen: React.FC<Props> = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.logoContainer}>
-          <Text style={styles.logo}>63</Text>
+          <Ionicons name="search" size={24} color="#FFFFFF" />
         </View>
         <TouchableOpacity style={styles.languageButton}>
           <Text style={styles.languageText}>English</Text>
@@ -191,8 +194,11 @@ const FarmerRegisterScreen: React.FC<Props> = ({ navigation }) => {
               onValueChange={(value) => setFormData({...formData, experienceLevel: value})}
               style={styles.picker}
             >
-              <Picker.Item label="Experience Level" value="" />
-              {/* Add experience level options */}
+             
+              <Picker.Item label="Beginner (0-2 years)" value="beginner" />
+              <Picker.Item label="Intermediate (3-5 years)" value="intermediate" />
+              <Picker.Item label="Advanced (6-10 years)" value="advanced" />
+              <Picker.Item label="Expert (10+ years)" value="expert" />
             </Picker>
           </View>
 
@@ -202,8 +208,14 @@ const FarmerRegisterScreen: React.FC<Props> = ({ navigation }) => {
               onValueChange={(value) => setFormData({...formData, insurancePreference: value})}
               style={styles.picker}
             >
-              <Picker.Item label="Insurance & Loan Preferences" value="" />
-              {/* Add insurance preferences options */}
+              
+              
+                <Picker.Item label="Crop Insurance" value="crop" />
+                <Picker.Item label="Equipment Insurance" value="equipment" />
+                <Picker.Item label="Comprehensive Coverage" value="comprehensive" />
+                <Picker.Item label="Weather Insurance" value="weather" />
+                <Picker.Item label="Not Interested" value="none" />
+
             </Picker>
           </View>
         </View>

@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, RefreshControl, ScrollView, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import FieldSelector, { Field } from '../components/fieldSelection';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 interface FieldMetric {
   title: string;
   value: string | number;
   unit: string;
   icon: string;
+}
+
+interface Profile {
+  name: string;
+  email: string;
 }
 
 const AnalyticsCard: React.FC<{ metric: FieldMetric }> = ({ metric }) => (
@@ -23,45 +29,79 @@ const AnalyticsCard: React.FC<{ metric: FieldMetric }> = ({ metric }) => (
   </View>
 );
 
-interface DropdownProps {
-  selectedField: Field;
-  setSelectedField: (field: Field) => void;
-}
-
-const Dropdown: React.FC<DropdownProps> = ({ selectedField, setSelectedField }) => {
-  const [fields, setFields] = useState([] as Field[]);
-
-  return (
-    <SafeAreaView style={styles.container}>
-      {/* ... (header code) ... */}
-
-      <View style={styles.fieldSelector}>
-       
-      </View>
-
-      {/* ... (rest of your existing JSX) ... */}
-    </SafeAreaView>
-  );
-}
-
 const Dashboard = () => {
   const [selectedField, setSelectedField] = useState<Field | null>(null);
   const [fields, setFields] = useState<Field[]>([]);
   const [isFieldSelectorVisible, setFieldSelectorVisible] = useState(false);
+  const [profile, setProfile] = useState<Profile>({ name: '', email: '' });
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   
-  useEffect(() => {
-    fetchFields();
+
+  const isFocused = useIsFocused();
+
+   useEffect(() => {
+    if (isFocused) {
+      fetchFields();
+      profiledata();
+    }
+  }, [isFocused]);
+
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    Promise.all([fetchFields(), profiledata()])
+      .finally(() => setRefreshing(false));
   }, []);
+
+  const profiledata = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      const response = await fetch('http://192.168.8.101:3000/api/auth/get', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (data.user) {
+        setProfile({
+          name: data.user.name || 'User',
+          email: data.user.email || ''
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+      setProfile({ name: 'User', email: '' });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchFields = async () => {
     try {
-      const response = await fetch('http://your-api-url/api/fields');
+      const response = await fetch('http://192.168.8.101:3000/api/fields/');
       const data = await response.json();
       setFields(data);
     } catch (error) {
       console.error('Error fetching fields:', error);
     }
-  }; // Added missing closing brace here
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.profileContainer}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (!profile.name) {
+    return (
+      <View style={styles.profileContainer}>
+        <Text>No profile data available</Text>
+      </View>
+    );
+  }
 
   const metrics: FieldMetric[] = [
     {
@@ -92,9 +132,17 @@ const Dashboard = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
+      }
+    >
       <View style={styles.header}>
         <View>
-          <Text style={styles.greeting}>Hi! Nethmal,</Text>
+          <Text style={styles.greeting}>Hi! {profile.name},</Text>
           <Text style={styles.title}>Your Field Analytics</Text>
         </View>
         <TouchableOpacity style={styles.languageButton}>
@@ -123,9 +171,6 @@ const Dashboard = () => {
         fields={fields}
       />
 
-      {/* Commented out Dropdown component */}
-      {/* <Dropdown selectedField={selectedField} setSelectedField={setSelectedField} /> */}
-
       <View style={styles.metricsGrid}>
         {metrics.map((metric, index) => (
           <AnalyticsCard key={index} metric={metric} />
@@ -141,15 +186,22 @@ const Dashboard = () => {
           <Ionicons name="chevron-forward-outline" size={24} color="#0F8B8D" />
         </View>
       </TouchableOpacity>
-    </SafeAreaView>
-  );
+    </ScrollView>
+  </SafeAreaView>
+);
 };
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5FAFA',
     padding: 16,
+  },
+  profileContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   header: {
     marginTop: 50,
