@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {
+import{
   View,
   Text,
   Image,
@@ -8,10 +8,13 @@ import {
   StyleSheet,
   Alert,
   ActivityIndicator,
+  ScrollView
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
+import ModalComponent from "react-native-modal";
+import Markdown from "react-native-markdown-display";
 
 const BACKEND_URL = "http://192.168.8.143:5000/predict";
 
@@ -22,6 +25,7 @@ const DiseaseAnalyzer = () => {
   const [plantAge, setPlantAge] = useState("");
   const [loading, setLoading] = useState(false);  
   const [prediction, setPrediction] = useState(null);
+  const [resultModal, setResultModal] = useState(false);
 
   const pickImage = async (useCamera) => {
     setModalVisible(false);
@@ -73,7 +77,7 @@ const DiseaseAnalyzer = () => {
 
       let data = await response.json();
       setPrediction(data);
-      console.log(data);
+      setResultModal(true);
     }catch(error){
       console.log(error);
       Alert.alert("Error", "An error occurred while analyzing the image.");
@@ -100,7 +104,7 @@ const DiseaseAnalyzer = () => {
         ) : (
           <>
             <Ionicons name="cloud-upload-outline" size={40} color="#00A67E" />
-            <Text style={styles.imageText}>Upload or capture your affected plant image</Text>
+            <Text style={styles.imageText}>Upload or capture{"\n"}  your affected plant image</Text>
           </>
         )}
       </TouchableOpacity>
@@ -137,13 +141,31 @@ const DiseaseAnalyzer = () => {
       {/* Prediction Result */}
       {loading && <ActivityIndicator size={"large"} color={"#00A67E"} style={{marginTop: 20}} />}
 
-      {prediction && (
-        <View style={styles.resultBox}>
-          <Text style={styles.resultText}>Disease:{prediction.class}</Text>
-          <Text style={styles.resultText}>Confidence: {prediction.confidence}</Text>
-          <Text style={styles.resultText}>Instructoin: {prediction.instructions}</Text>
+
+      <ModalComponent 
+        isVisible={resultModal}
+        onBackdropPress={() => setResultModal(false)}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+        style={styles.modal}
+      >
+        <View style={styles.modalContent}>
+          <ScrollView style={{flexGrow: 20}}>
+            <Text style={styles.resultTitle}>Analysis Result</Text>
+            {prediction && (
+              <>
+                <Text style={styles.resultText}><Text style={{ fontWeight: "bold" }}>Disease:</Text> {prediction.class}</Text>
+                <Text style={styles.resultText}><Text style={{ fontWeight: "bold" }}>Confidence:</Text> {(parseFloat(prediction.confidence)*100).toFixed(2)}%</Text>
+                <Text style={styles.resultText}><Text style={{ fontWeight: "bold" }}>Instructions:</Text></Text>
+                <Markdown style={styles.instructions}>{prediction.instructions}</Markdown>
+              </>
+            )}
+            <TouchableOpacity onPress={() => setResultModal(false)} style={styles.modalCloseButton}>
+              <Text style={styles.buttonText}>Close</Text>
+            </TouchableOpacity>
+          </ScrollView>
         </View>
-      )}
+      </ModalComponent>
 
       {/* Image Selection Modal */}
       <Modal visible={modalVisible} transparent animationType="slide">
@@ -165,7 +187,6 @@ const DiseaseAnalyzer = () => {
   );
 };
 
-// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -193,8 +214,8 @@ const styles = StyleSheet.create({
   },
   imageBox: {
     width: "100%",
-    height: 180,
-    backgroundColor: "#E6F7F0",
+    height: 250,
+    backgroundColor: "#FFF",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 12,
@@ -205,6 +226,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 5,
     fontWeight: 600,
+    lineHeight: 25,
+    fontSize: 18,
   },
   image: {
     width: "100%",
@@ -212,7 +235,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   label: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "600",
     color: "#1A1A1A",
     marginBottom: 5,
@@ -220,7 +243,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     backgroundColor: "#FFFFFF",
     borderRadius: 8,
-    marginBottom: 10,
+    marginBottom: 12,
     paddingHorizontal: 10,
   },
   button: {
@@ -242,11 +265,12 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalContent: {
-    width: "80%",
+    width: "100%",
     backgroundColor: "#FFF",
     borderRadius: 10,
     padding: 20,
     alignItems: "center",
+    maxHeight: "80%",
   },
   modalButton: {
     paddingVertical: 15,
@@ -273,6 +297,27 @@ const styles = StyleSheet.create({
   resultText: { 
     fontSize: 16, 
     color: "#1A1A1A", 
+  },
+  modal: {
+    justifyContent: "flex-end",
+    margin: 0,
+  },
+  resultTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  instructions: {
+    fontSize: 14,
+    color: "#555",
+    marginTop: 5,
+  },
+  modalCloseButton: {
+    marginTop: 20,
+    backgroundColor: "#00A67E",
+    paddingVertical: 15,
+    borderRadius: 8,
+    alignItems: "center",
   }
 });
 
