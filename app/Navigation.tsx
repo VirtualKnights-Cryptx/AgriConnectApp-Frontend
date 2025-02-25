@@ -11,6 +11,8 @@ import MenuBar from './pages/Main/menubar';
 import BeforeRegisterScreen from './pages/auth/BeforeRegisterScreen';
 import AddFieldDetailsScreen from './pages/Main/addfieldscreen';
 import FieldDetailsScreen from './pages/Main/fielddetailsscreen';
+import DiseaseAnalyzer from './pages/Main/DiseaseAnalyzer';
+
 const Stack = createStackNavigator();
 const NewStack = () => {
     return (
@@ -24,6 +26,7 @@ const NewStack = () => {
             <Stack.Screen name="Password" component={Password} />
             <Stack.Screen name="MenuBar" component={MenuBar} />
             <Stack.Screen name="BeforeRegister" component={BeforeRegisterScreen} />
+            <Stack.Screen name="DiseaseAnalyzer" component={DiseaseAnalyzer} />
             <Stack.Screen name="AddFieldDetails" component={AddFieldDetailsScreen} />
             <Stack.Screen name="FieldDetails" component={FieldDetailsScreen} />
         </Stack.Navigator>
