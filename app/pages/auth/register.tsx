@@ -95,7 +95,7 @@ const FarmerRegisterScreen: React.FC<Props> = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.logoContainer}>
-          <Ionicons name="search" size={24} color="#FFFFFF" />
+           <Ionicons name="glasses-outline" size={24} color="#00A67E" />
         </View>
         <TouchableOpacity style={styles.languageButton}>
           <Text style={styles.languageText}>English</Text>
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'android' ? 20 : 0,
   },
   logoContainer: {
-    backgroundColor: '#00A67E',
+    backgroundColor: 'rgb(253, 253, 253)',
     width: 40,
     height: 40,
     borderRadius: 8,

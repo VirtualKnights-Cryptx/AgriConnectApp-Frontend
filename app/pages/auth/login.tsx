@@ -12,6 +12,7 @@ import { StatusBar } from 'expo-status-bar';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons } from '@expo/vector-icons';
 interface Props {
   navigation: NativeStackNavigationProp<any>;
 }
@@ -82,7 +83,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
       
       <View style={styles.header}>
         <View style={styles.logoContainer}>
-          <Text style={styles.logo}>63</Text>
+        <Ionicons name="glasses-outline" size={24} color="#00A67E" />
         </View>
         <TouchableOpacity style={styles.languageButton}>
           <Text style={styles.languageText}>English</Text>
@@ -162,7 +163,7 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'android' ? 20 : 0,
   },
   logoContainer: {
-    backgroundColor: '#00A67E',
+    backgroundColor: 'rgb(242, 242, 242)',
     width: 40,
     height: 40,
     borderRadius: 8,

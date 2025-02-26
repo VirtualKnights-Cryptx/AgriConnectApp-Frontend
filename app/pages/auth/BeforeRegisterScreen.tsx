@@ -10,7 +10,7 @@ import {
   Dimensions
 } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
+import { Ionicons } from '@expo/vector-icons';
 const { width } = Dimensions.get('window');
 
 interface Props {
@@ -43,7 +43,7 @@ const BeforeRegisterScreen: React.FC<Props> = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.logoContainer}>
-          <Text style={styles.logo}>63</Text>
+        <Ionicons name="glasses-outline" size={24} color="#00A67E" />
         </View>
         <TouchableOpacity style={styles.languageButton}>
           <Text style={styles.languageText}>English</Text>
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'android' ? 20 : 0,
   },
   logoContainer: {
-    backgroundColor: '#00A67E',
+    backgroundColor: '#FFFFFF',
     width: 40,
     height: 40,
     borderRadius: 8,

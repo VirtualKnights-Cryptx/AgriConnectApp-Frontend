@@ -13,6 +13,7 @@ import { StatusBar } from 'expo-status-bar';
 import { AddHarvestModal } from '../components/AddHarvestModal';
 import axios from 'axios';
 import { AddHarvestFormData } from './types';
+import Ionicons from '@expo/vector-icons/Ionicons';
 interface Harvest {
   id: string;
   fieldName: string;
@@ -106,10 +107,8 @@ export default function MarketplaceScreen() {
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.logoContainer}>
-          <Image 
-            source={require('../../../assets/images/buyer.png')}
-            style={styles.logo}
-          />
+          <Ionicons name="glasses-outline" size={24} color="#00A67E" />
+        
         </View>
         <View style={styles.languageSelector}>
           <Text>English</Text>
@@ -161,6 +160,7 @@ export default function MarketplaceScreen() {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 24,
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   logoContainer: {
     width: 40,
     height: 40,
-    backgroundColor: '#00875A',
+    backgroundColor: '#ffffff',
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
@@ -183,6 +183,9 @@ const styles = StyleSheet.create({
     height: 24,
   },
   languageSelector: {
+    backgroundColor: '#ffffff',
+    padding: 12,
+    borderRadius: 12,
     flexDirection: 'row',
     alignItems: 'center',
   },

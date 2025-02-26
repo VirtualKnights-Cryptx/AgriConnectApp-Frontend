@@ -15,10 +15,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import ModalComponent from "react-native-modal";
 import Markdown from "react-native-markdown-display";
-
+import { useNavigation } from "@react-navigation/native";
 const BACKEND_URL = "http://192.168.8.143:5000/predict";
 
 const DiseaseAnalyzer = () => {
+  const navigation = useNavigation();
   const [selectedImage, setSelectedImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [plantType, setPlantType] = useState("");
@@ -89,8 +90,10 @@ const DiseaseAnalyzer = () => {
   return (
     <View style={styles.container}>
       {/* Back Button */}
-      <TouchableOpacity style={styles.backButton}>
+      <TouchableOpacity style={styles.backButton}
+      onPress={() => navigation.goBack()}>
         <Ionicons name="arrow-back-outline" size={24} color="#3D3D3D" />
+
       </TouchableOpacity>
 
       {/* Title */}
