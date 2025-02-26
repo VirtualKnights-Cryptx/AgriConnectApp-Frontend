@@ -55,7 +55,7 @@ const FieldDetailsScreen: React.FC<FieldDetailsScreenProps> = ({ route, navigati
       setLoading(true);
       
       // Log the request URL for debugging
-      const savedSuggestionsUrl = `http://192.168.8.101:3000/api/suggestions/${field.id}/saved`;
+      const savedSuggestionsUrl = `http://192.168.8.100:3000/api/suggestions/${field.id}/saved`;
       console.log('Fetching saved suggestions from:', savedSuggestionsUrl);
 
       // First try to get saved suggestions
@@ -67,7 +67,7 @@ const FieldDetailsScreen: React.FC<FieldDetailsScreenProps> = ({ route, navigati
         
         if (response.status === 404) {
           // If no saved suggestions, generate new ones
-          const newSuggestionsUrl = `http://192.168.8.101:3000/api/suggestions/${field.id}`;
+          const newSuggestionsUrl = `http://192.168.8.100:3000/api/suggestions/${field.id}`;
           console.log('Fetching new suggestions from:', newSuggestionsUrl);
           
           response = await fetch(newSuggestionsUrl);

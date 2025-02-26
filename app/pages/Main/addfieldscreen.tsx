@@ -39,7 +39,7 @@ interface AddFieldDetailsScreenProps {
 }
 
 // API Configuration
-const API_BASE_URL = 'http://192.168.8.101:3000'; // Replace with your actual API URL
+const API_BASE_URL = 'http://192.168.8.100:3000'; // Replace with your actual API URL
 
 // API Service
 const fieldService = {

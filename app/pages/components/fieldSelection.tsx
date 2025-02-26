@@ -8,6 +8,7 @@ export interface Field {
     location: string;
   }
   
+  
   interface FieldSelectorProps {
     selectedField: Field | null;
     onSelectField: (field: Field) => void;
