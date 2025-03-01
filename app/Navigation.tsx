@@ -12,6 +12,9 @@ import BeforeRegisterScreen from './pages/auth/BeforeRegisterScreen';
 import AddFieldDetailsScreen from './pages/Main/addfieldscreen';
 import FieldDetailsScreen from './pages/Main/fielddetailsscreen';
 import DiseaseAnalyzer from './pages/Main/DiseaseAnalyzer';
+import PaymentSuccessScreen from './pages/payments/paymentsuccess';
+import PaymentFailedScreen from './pages/payments/paymentfail';
+import StripePaymentWrapper from './pages/payments/payment';
 
 const Stack = createStackNavigator();
 const NewStack = () => {
@@ -29,6 +32,9 @@ const NewStack = () => {
             <Stack.Screen name="DiseaseAnalyzer" component={DiseaseAnalyzer} />
             <Stack.Screen name="AddFieldDetails" component={AddFieldDetailsScreen} />
             <Stack.Screen name="FieldDetails" component={FieldDetailsScreen} />
+            <Stack.Screen name="PaymentSuccess" component={PaymentSuccessScreen} />
+            <Stack.Screen name="PaymentFailed" component={PaymentFailedScreen} />
+            <Stack.Screen name="PaymentScreen" component={StripePaymentWrapper} />
         </Stack.Navigator>
       
     );  

@@ -35,7 +35,7 @@ const VirtualFieldsScreen: React.FC<VirtualFieldsScreenProps> = ({ navigation })
 
   const fetchFields = async () => {
     try {
-      const response = await fetch('http://192.168.8.100:3000/api/fields/');
+      const response = await fetch('https://agri-connect-backend2.vercel.app/api/fields/');
       const data = await response.json();
       setFields(data);
     } catch (error) {
