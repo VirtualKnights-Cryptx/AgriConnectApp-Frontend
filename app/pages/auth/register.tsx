@@ -66,7 +66,7 @@ const FarmerRegisterScreen: React.FC<Props> = ({ navigation }) => {
         experienceLevel: formData.experienceLevel,
       };
   
-      const response = await fetch('http://192.168.8.101:3000/api/auth/register', {
+      const response = await fetch('https://agri-connect-backend2.vercel.app/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

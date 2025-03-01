@@ -35,7 +35,7 @@ interface WeatherData {
   };
 }
 
-const API_BASE_URL = 'http://192.168.8.100:3000/api';
+const API_BASE_URL = 'https://agri-connect-backend2.vercel.app/api';
 
 const AnalyticsCard: React.FC<{ metric: FieldMetric }> = ({ metric }) => (
   <View style={styles.metricCard}>

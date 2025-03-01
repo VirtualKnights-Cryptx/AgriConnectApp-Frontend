@@ -7,13 +7,15 @@ import {
   SafeAreaView, 
   TouchableOpacity, 
   ScrollView,
-  Alert 
+  Alert
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { AddHarvestModal } from '../components/AddHarvestModal';
 import axios from 'axios';
 import { AddHarvestFormData } from './types';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
+
 interface Harvest {
   id: string;
   fieldName: string;
@@ -25,10 +27,11 @@ interface Harvest {
 }
 
 interface CropItemProps extends Harvest {
-  onBuy: () => void;
+  onBuy: (id: string, price: number, name: string) => void;
 }
 
 const CropItemComponent: React.FC<CropItemProps> = ({ 
+  id,
   fieldName, 
   price, 
   location, 
@@ -46,18 +49,19 @@ const CropItemComponent: React.FC<CropItemProps> = ({
       <Text style={styles.location}>{location}</Text>
       <Text style={styles.price}>Rs.{price}/1kg</Text>
     </View>
-    <TouchableOpacity style={styles.buyButton} onPress={onBuy}>
+    <TouchableOpacity style={styles.buyButton} onPress={() => onBuy(id, price, fieldName)}>
       <Text style={styles.buyButtonText}>Buy</Text>
     </TouchableOpacity>
   </View>
 );
 
-const API_BASE_URL = 'http://192.168.8.100:3000/api/products';
+const API_BASE_URL = 'https://agri-connect-backend2.vercel.app/api/products';
 
 export default function MarketplaceScreen() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [harvests, setHarvests] = useState<Harvest[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const navigation = useNavigation<any>();
 
   useEffect(() => {
     fetchHarvests();
@@ -87,17 +91,18 @@ export default function MarketplaceScreen() {
     }
   };
 
-  const handleBuyHarvest = async (harvestId: string) => {
-    try {
-      await axios.post(`${API_BASE_URL}/harvests/${harvestId}/buy`, {
-        quantity: 1 // You might want to add quantity selection
-      });
-      Alert.alert('Success', 'Purchase successful');
-      fetchHarvests(); // Refresh the list
-    } catch (error) {
-      console.error('Error buying harvest:', error);
-      Alert.alert('Error', 'Failed to complete purchase');
-    }
+  const handleBuyHarvest = (productId: string, price: number, productName: string) => {
+    // Navigate to the payment screen with product details
+    navigation.navigate('PaymentScreen', {
+      productId,
+      amount: price,
+      productName,
+      onPaymentSuccess: () => {
+        // This callback will be called after successful payment
+        Alert.alert('Success', 'Purchase completed successfully');
+        fetchHarvests(); // Refresh the harvest list
+      }
+    });
   };
 
   return (
@@ -134,7 +139,7 @@ export default function MarketplaceScreen() {
             <CropItemComponent 
               key={harvest.id}
               {...harvest}
-              onBuy={() => handleBuyHarvest(harvest.id)}
+              onBuy={handleBuyHarvest}
             />
           ))
         )}
