@@ -41,7 +41,7 @@ const AnalyticsCard: React.FC<{ metric: FieldMetric }> = ({ metric }) => (
   <View style={styles.metricCard}>
     <View style={styles.iconContainer}>
       {typeof metric.icon === 'string' ? (
-        <Fontisto name={metric.icon as any} size={24} color="#0F8B8D" />
+        <Fontisto name={metric.icon as any} size={30} color="#3D3D3D" />
       ) : (
         metric.icon
       )}
@@ -231,15 +231,20 @@ const Dashboard = () => {
           />
         }
       >
+        
         <View style={styles.header}>
-          <View>
-            <Text style={styles.greeting}>Hi! {profile.name},</Text>
-            <Text style={styles.title}>Your Field Analytics</Text>
+          <View style={styles.logoContainer}>
+            <Ionicons name="glasses-outline" size={24} color="#FFFFFF" />
           </View>
           <TouchableOpacity style={styles.languageButton}>
             <Text style={styles.languageText}>English</Text>
             <Ionicons name="chevron-down-outline" size={16} color="#3D3D3D" />
           </TouchableOpacity>
+        </View>
+
+        <View>
+            <Text style={styles.greeting}>Hi! {profile.name},</Text>
+            <Text style={styles.title}>Your Field Analytics</Text>
         </View>
 
         <View style={styles.locationContainer}>
@@ -260,7 +265,7 @@ const Dashboard = () => {
             <Text style={styles.selectorText}>
               {selectedField ? selectedField.name : 'Select Your Field'}
             </Text>
-            <Ionicons name="chevron-down-outline" size={30} color="#666" />
+            <Ionicons name="chevron-down-outline" size={30} color="#3D3D3D" />
           </TouchableOpacity>
         </View>
 
@@ -284,7 +289,7 @@ const Dashboard = () => {
               <Text style={styles.revenueTitle}>Revenue Analysis</Text>
               <Text style={styles.revenueSubtitle}>Generate Report</Text>
             </View>
-            <Ionicons name="chevron-forward-outline" size={24} color="#0F8B8D" />
+            <Ionicons name="chevron-forward-outline" size={24} color="#3D3D3D" />
           </View>
         </TouchableOpacity>
       </ScrollView>
@@ -298,28 +303,43 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     padding: 16,
   },
+  logoContainer: {
+    backgroundColor: '#029972',
+    width: 40,
+    height: 40,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 0,
+  },
+  logo: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
   profileContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   header: {
-    marginTop: 75,
+    marginTop: 50,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 20,
   },
   greeting: {
     fontSize: 19,
     fontWeight: '600',
     color: '#3D3D3D',
-    marginBottom: 8,
+    marginBottom: 5,
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
     color: '#00A67E',
+    marginBottom: 16,
   },
   languageButton: {
     flexDirection: 'row',
@@ -328,7 +348,7 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 10,
     gap: 4,
-    marginTop: -100,
+    marginTop: 0,
   },
   languageText: {
     color: '#3D3D3D',
@@ -379,7 +399,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   selectorText: {
-    color: '#666',
+    color: '#3D3D3D',
     fontSize: 20,
   },
   metricsGrid: {
@@ -387,6 +407,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 16,
     marginBottom: 24,
+    color: '#3D3D3D',
   },
   metricCard: {
     backgroundColor: '#fff',

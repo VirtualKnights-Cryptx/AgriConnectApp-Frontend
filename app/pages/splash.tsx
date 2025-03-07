@@ -37,7 +37,7 @@ const SplashScreen: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E6F7F7',  
+    backgroundColor: '#FFFFFF',  
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -47,10 +47,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
   },
   logo: {
-    width: 120,
-    height: 120,
+    width: 150,
+    height: 150,
     marginBottom: 20,
-    tintColor: '#0F8B8D',  // Teal color for the logo
   },
   title: {
     fontSize: 32,
