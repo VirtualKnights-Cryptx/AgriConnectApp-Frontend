@@ -40,11 +40,11 @@ const Tools: React.FC<ToolsProps> = ({ navigation }) => {
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.logoContainer}>
-          <Ionicons name="glasses-outline" size={24} color="#00A67E" />
+          <Ionicons name="glasses-outline" size={24} color="#FFFFFF" />
         </View>
         <TouchableOpacity style={styles.languageButton} onPress={handleLanguageChange}>
           <Text style={styles.languageText}>English</Text>
-          <Ionicons name="chevron-down" size={16} color="#00A67E" />
+          <Ionicons name="chevron-down" size={16} color="#3D3D3D" />
         </TouchableOpacity>
       </View>
 
@@ -57,24 +57,24 @@ const Tools: React.FC<ToolsProps> = ({ navigation }) => {
           <View style={styles.row}>
             <ToolCard
               title="Crop Disease Analyzer"
-              icon={<Ionicons name="scan-outline" size={28} color="#1A1A1A" />}
+              icon={<Ionicons name="scan-outline" size={30} color="#1A1A1A" />}
               onPress={() => navigation.navigate('DiseaseAnalyzer')}
             />
             <ToolCard
               title="AI ChatBot"
-              icon={<Ionicons name="people-circle-outline" size={28} color="#1A1A1A" />}
+              icon={<Ionicons name="people-circle-outline" size={30} color="#1A1A1A" />}
               onPress={() => {}}
             />
           </View>
           <View style={styles.row}>
             <ToolCard
               title="Equipment Share"
-              icon={<Ionicons name="cube-outline" size={28} color="#1A1A1A" />}
+              icon={<Ionicons name="cube-outline" size={30} color="#1A1A1A" />}
               onPress={() => {}}
             />
             <ToolCard
               title="Knowledge Share"
-              icon={<Ionicons name="people-outline" size={28} color="#1A1A1A" />}
+              icon={<Ionicons name="people-outline" size={30} color="#1A1A1A" />}
               onPress={() => {}}
             />
           </View>
@@ -87,54 +87,60 @@ const Tools: React.FC<ToolsProps> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F2FBF6', // Light green background
+    backgroundColor: '#FFFFFF', // Light green background
   },
   header: {
-    marginTop: 30,
+    marginTop: 50,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingTop: 8,
-    paddingBottom: 16,
+    paddingBottom: 0,
   },
   logoContainer: {
+    backgroundColor: '#029972',
     width: 40,
     height: 40,
     borderRadius: 8,
-    backgroundColor: '#E6F7F0',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 0,
+  },
+  logo: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   languageButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E6F7F0',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
+    backgroundColor: '#ECFDF6',
+    padding: 8,
+    borderRadius: 10,
+    gap: 4,
+    marginTop: 0,
   },
   languageText: {
-    color: '#00A67E',
-    marginRight: 4,
-    fontSize: 14,
+    color: '#3D3D3D',
     fontWeight: '500',
+    fontSize: 16,
   },
   content: {
     flex: 1,
     padding: 24,
   },
   title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#1A1A1A',
-    marginBottom: 8,
+    fontSize: 19,
+    fontWeight: '600',
+    color: '#3D3D3D',
+    marginBottom: 5,
   },
   subtitle: {
-    fontSize: 20,
-    fontWeight: '600',
+    fontSize: 28,
+    fontWeight: 'bold',
     color: '#00A67E',
-    marginBottom: 32,
+    marginBottom: 24,
   },
   gridContainer: {
     flex: 1,
@@ -162,8 +168,8 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   iconContainer: {
-    width: 48,
-    height: 48,
+    width: 60,
+    height: 60,
     borderRadius: 24,
     backgroundColor: '#F5F5F5',
     justifyContent: 'center',
@@ -171,7 +177,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   cardText: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '500',
     color: '#1A1A1A',
     textAlign: 'center',

@@ -177,10 +177,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    marginTop: 16,
-    fontSize: 32,
+    marginTop: 30,
+    fontSize: 24,
     fontWeight: '800',
-    color: '#1A1A1A',
+    color: '#3D3D3D',
     letterSpacing: 0.7,
     marginBottom: 24,
   },
