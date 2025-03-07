@@ -21,7 +21,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-
+  const image = require('../../../assets/images/GIcon.svg');
 
 
   const handleLogin = async () => {
@@ -83,10 +83,11 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
       
       <View style={styles.header}>
         <View style={styles.logoContainer}>
-        <Ionicons name="glasses-outline" size={24} color="#00A67E" />
+          <Ionicons name="glasses-outline" size={24} color="#FFFFFF" />
         </View>
         <TouchableOpacity style={styles.languageButton}>
           <Text style={styles.languageText}>English</Text>
+          <Ionicons name="chevron-down-outline" size={16} color="#3D3D3D" />
         </TouchableOpacity>
       </View>
 
@@ -135,6 +136,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
           onPress={handleGoogleLogin}
           disabled={loading}
         >
+          <Ionicons name="logo-google" size={24} color="#333333" />
           <Text style={styles.googleButtonText}>Google</Text>
         </TouchableOpacity>
 
@@ -163,7 +165,7 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'android' ? 20 : 0,
   },
   logoContainer: {
-    backgroundColor: 'rgb(242, 242, 242)',
+    backgroundColor: '#029972',
     width: 40,
     height: 40,
     borderRadius: 8,
@@ -178,20 +180,26 @@ const styles = StyleSheet.create({
   languageButton: {
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: '#ECFDF6',
+    padding: 8,
+    borderRadius: 10,
+    gap: 4,
+    marginTop: 0,
   },
   languageText: {
-    color: '#00A67E',
+    color: '#3D3D3D',
+    fontWeight: '500',
     fontSize: 16,
   },
   content: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingTop: 40,
+    paddingTop: 200,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    color: '#333333',
+    color: '#3D3D3D',
     marginBottom: 30,
   },
   input: {
@@ -212,14 +220,18 @@ const styles = StyleSheet.create({
   loginButton: {
     backgroundColor: '#00A67E',
     borderRadius: 8,
-    padding: 15,
+    padding: 18,
     alignItems: 'center',
     marginBottom: 20,
+    width: '50%',
+    marginLeft: '25%',
   },
   loginButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',
+    width: '50%',
+    marginLeft: '25%',
   },
   orText: {
     color: '#666666',
@@ -235,6 +247,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#DDDDDD',
     marginBottom: 30,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 8,
+    width: '50%',
+    marginLeft: '25%',
   },
   googleButtonText: {
     color: '#333333',
@@ -247,7 +264,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   registerText: {
-    color: '#666666',
+    color: '#1E1E1E',
     fontSize: 18,
   },
   registerLink: {
