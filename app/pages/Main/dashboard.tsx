@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#017B5E',
+    color: '#00A67E',
   },
   languageButton: {
     flexDirection: 'row',

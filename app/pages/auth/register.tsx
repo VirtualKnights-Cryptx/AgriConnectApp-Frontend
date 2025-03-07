@@ -95,10 +95,11 @@ const FarmerRegisterScreen: React.FC<Props> = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.logoContainer}>
-           <Ionicons name="glasses-outline" size={24} color="#00A67E" />
+           <Ionicons name="glasses-outline" size={24} color="#FFFFFF" />
         </View>
         <TouchableOpacity style={styles.languageButton}>
           <Text style={styles.languageText}>English</Text>
+          <Ionicons name="chevron-down-outline" size={16} color="#3D3D3D" />
         </TouchableOpacity>
       </View>
 
@@ -106,7 +107,7 @@ const FarmerRegisterScreen: React.FC<Props> = ({ navigation }) => {
         <Text style={styles.title}>Create Your Account</Text>
         
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Personal Details *</Text>
+          <Text style={styles.sectionTitle}>Personal Details <Text style={{color: "red"}}>*</Text></Text>
           <TextInput
             style={styles.input}
             placeholder="Full Name"
@@ -129,7 +130,7 @@ const FarmerRegisterScreen: React.FC<Props> = ({ navigation }) => {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Location Information *</Text>
+          <Text style={styles.sectionTitle}>Location Information <Text style={{color: "red"}}>*</Text></Text>
           <TextInput
             style={styles.input}
             placeholder="Address"
@@ -137,25 +138,7 @@ const FarmerRegisterScreen: React.FC<Props> = ({ navigation }) => {
             onChangeText={(text) => setFormData({...formData, address: text})}
           />
 
-<View style={styles.section}>
-  <Text style={styles.sectionTitle}>Account Details *</Text>
-  <TextInput
-    style={styles.input}
-    placeholder="Email"
-    value={formData.email}
-    onChangeText={(text) => setFormData({...formData, email: text})}
-    keyboardType="email-address"
-  />
-  <TextInput
-    style={styles.input}
-    placeholder="Password"
-    value={formData.password}
-    onChangeText={(text) => setFormData({...formData, password: text})}
-    secureTextEntry
-  />
-</View>
-          
-          <View style={styles.pickerContainer}>
+<View style={styles.pickerContainer}>
             <Picker
               selectedValue={formData.district}
               onValueChange={(value) => setFormData({...formData, district: value})}
@@ -184,6 +167,24 @@ const FarmerRegisterScreen: React.FC<Props> = ({ navigation }) => {
             onChangeText={(text) => setFormData({...formData, postalCode: text})}
             keyboardType="numeric"
           />
+
+<View style={styles.section}>
+  <Text style={styles.sectionTitle}>Account Details <Text style={{color: "red"}}>*</Text></Text>
+  <TextInput
+    style={styles.input}
+    placeholder="Email"
+    value={formData.email}
+    onChangeText={(text) => setFormData({...formData, email: text})}
+    keyboardType="email-address"
+  />
+  <TextInput
+    style={styles.input}
+    placeholder="Password"
+    value={formData.password}
+    onChangeText={(text) => setFormData({...formData, password: text})}
+    secureTextEntry
+  />
+</View>
         </View>
 
         <View style={styles.section}>
@@ -238,7 +239,7 @@ const FarmerRegisterScreen: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F0FFF9',
+    backgroundColor: '#FFFFFF',
   },
   header: {
     marginTop:30,
@@ -249,7 +250,7 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'android' ? 20 : 0,
   },
   logoContainer: {
-    backgroundColor: 'rgb(253, 253, 253)',
+    backgroundColor: '#029972',
     width: 40,
     height: 40,
     borderRadius: 8,
@@ -262,15 +263,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   languageButton: {
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#ECFDF6',
+    padding: 8,
+    borderRadius: 10,
+    gap: 4,
+    marginTop: 0,
   },
   languageText: {
-    color: '#00A67E',
-    fontSize: 14,
+    color: '#3D3D3D',
     fontWeight: '500',
+    fontSize: 16,
   },
   content: {
     flex: 1,
@@ -280,32 +284,35 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333333',
-    marginBottom: 20,
+    color: '#3D3D3D',
+    marginBottom: 10,
   },
   section: {
     marginBottom: 20,
   },
   sectionTitle: {
     fontSize: 14,
-    color: '#666666',
+    color: '#3D3D3D',
     marginBottom: 10,
+    fontWeight: '600',
   },
   input: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgb(248, 248, 248)',
     borderRadius: 8,
     padding: 15,
     marginBottom: 12,
     fontSize: 16,
   },
   pickerContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgb(248, 248, 248)',
     borderRadius: 8,
     marginBottom: 12,
     overflow: 'hidden',
+
   },
   picker: {
     height: 50,
+    color: '#rgb(92, 92, 92)', 
   },
   registerButton: {
     backgroundColor: '#00A67E',
@@ -324,18 +331,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 30,
+    paddingVertical: 20,
+    marginBottom: 40,
   },
   loginText: {
-    color: '#666666',
+    color: '#1E1E1E',
     fontSize: 18,
-    marginBottom: 20,
   },
   loginLink: {
     color: '#00A67E',
     fontSize: 18,
     fontWeight: '500',
-    marginBottom: 20,
   },
 });
 
