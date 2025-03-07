@@ -112,13 +112,14 @@ export default function MarketplaceScreen() {
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.logoContainer}>
-          <Ionicons name="glasses-outline" size={24} color="#00A67E" />
-        
+          <Ionicons name="glasses-outline" size={24} color="#FFFFFF" />
         </View>
-        <View style={styles.languageSelector}>
-          <Text>English</Text>
-        </View>
+        <TouchableOpacity style={styles.languageButton}>
+          <Text style={styles.languageText}>English</Text>
+          <Ionicons name="chevron-down-outline" size={16} color="#3D3D3D" />
+        </TouchableOpacity>
       </View>
+
 
       {/* Action Buttons */}
       <View style={styles.actionButtons}>
@@ -165,34 +166,42 @@ export default function MarketplaceScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 24,
     flex: 1,
-    backgroundColor: '#ECFDF6',
+    backgroundColor: '#FFF',
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
+    marginTop: 50,
   },
   logoContainer: {
+    backgroundColor: '#029972',
     width: 40,
     height: 40,
-    backgroundColor: '#ffffff',
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
   },
   logo: {
-    width: 24,
-    height: 24,
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
-  languageSelector: {
-    backgroundColor: '#ffffff',
-    padding: 12,
-    borderRadius: 12,
+  languageButton: {
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: '#ECFDF6',
+    padding: 8,
+    borderRadius: 10,
+    gap: 4,
+    marginTop: 0,
+  },
+  languageText: {
+    color: '#3D3D3D',
+    fontWeight: '500',
+    fontSize: 16,
   },
   actionButtons: {
     flexDirection: 'row',
@@ -201,7 +210,7 @@ const styles = StyleSheet.create({
   },
   primaryButton: {
     flex: 1,
-    backgroundColor: '#00875A',
+    backgroundColor: '#029972',
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',
@@ -218,7 +227,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   secondaryButtonText: {
-    color: '#00875A',
+    color: '#029972',
     fontWeight: '600',
   },
   cropList: {
@@ -226,7 +235,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   cropCard: {
-    backgroundColor: 'white',
+    backgroundColor: '#FAFAFA',
     borderRadius: 12,
     padding: 16,
     flexDirection: 'row',
@@ -254,12 +263,12 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   price: {
-    color: '#00875A',
+    color: '#029972',
     fontWeight: '600',
     marginTop: 4,
   },
   buyButton: {
-    backgroundColor: '#00875A',
+    backgroundColor: '#029972',
     paddingHorizontal: 20,
     paddingVertical: 8,
     borderRadius: 6,
@@ -269,7 +278,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   sellButton: {
-    backgroundColor: '#00875A',
+    backgroundColor: '#029972',
     margin: 16,
     padding: 16,
     borderRadius: 8,
