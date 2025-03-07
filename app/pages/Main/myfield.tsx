@@ -153,7 +153,7 @@ const VirtualFieldsScreen: React.FC<VirtualFieldsScreenProps> = ({ navigation })
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E8F5F1',
+    backgroundColor: '#FFF',
   },
   fixedHeader: {
     backgroundColor: '#E8F5F1',

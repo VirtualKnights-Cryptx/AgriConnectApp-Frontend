@@ -220,7 +220,7 @@ const FieldDetailsScreen: React.FC<FieldDetailsScreenProps> = ({ route, navigati
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E8F5F1',
+    backgroundColor: '#111',
   },
   header: {
     flexDirection: 'row',

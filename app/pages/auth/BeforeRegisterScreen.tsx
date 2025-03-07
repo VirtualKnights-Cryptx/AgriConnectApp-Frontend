@@ -43,10 +43,11 @@ const BeforeRegisterScreen: React.FC<Props> = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.logoContainer}>
-        <Ionicons name="glasses-outline" size={24} color="#00A67E" />
+        <Ionicons name="glasses-outline" size={24} color="#FFFFFF" />
         </View>
         <TouchableOpacity style={styles.languageButton}>
           <Text style={styles.languageText}>English</Text>
+          <Ionicons name="chevron-down-outline" size={16} color="#3D3D3D" />
         </TouchableOpacity>
       </View>
 
@@ -87,10 +88,10 @@ const styles = StyleSheet.create({
   container: {
     
     flex: 1,
-    backgroundColor: '#F0FFF9',
+    backgroundColor: '#FFFFFF',
   },
   header: {
-    marginTop:20,
+    marginTop:30,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'android' ? 20 : 0,
   },
   logoContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#029972',
     width: 40,
     height: 40,
     borderRadius: 8,
@@ -111,17 +112,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   languageButton: {
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: '#ECFDF6',
+    padding: 8,
+    borderRadius: 10,
+    gap: 4,
+    marginTop: 0,
   },
   languageText: {
-    color: '#00A67E',
-    fontSize: 16,
+    color: '#3D3D3D',
     fontWeight: '500',
+    fontSize: 16,
   },
   content: {
     flex: 1,
@@ -129,19 +131,19 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   subtitle: {
-    fontSize: 18,
-    color: '#333333',
-    marginBottom: 8,
+    fontSize: 24,
+    color: '#3D3D3D',
+    fontWeight: 600,
   },
   title: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#00A67E',
+    color: '#017B5E',
     marginBottom: 24,
   },
   categoriesContainer: {
     flex: 1,
-    gap: 10,
+    gap:-30,
   },
   categoryCard: {
     height: 180,
@@ -171,15 +173,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 20,
-    marginBottom: 20,
+    marginBottom: 40,
   },
   loginText: {
-    color: '#666666',
-    fontSize: 22,
+    color: '#1E1E1E',
+    fontSize: 18,
   },
   loginLink: {
     color: '#00A67E',
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '500',
   },
 });

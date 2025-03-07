@@ -238,7 +238,7 @@ const Dashboard = () => {
           </View>
           <TouchableOpacity style={styles.languageButton}>
             <Text style={styles.languageText}>English</Text>
-            <Ionicons name="chevron-down-outline" size={16} color="#0F8B8D" />
+            <Ionicons name="chevron-down-outline" size={16} color="#3D3D3D" />
           </TouchableOpacity>
         </View>
 
@@ -295,7 +295,7 @@ const Dashboard = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5FAFA',
+    backgroundColor: '#FFFFFF',
     padding: 16,
   },
   profileContainer: {
@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   header: {
-    marginTop: 50,
+    marginTop: 75,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -312,24 +312,26 @@ const styles = StyleSheet.create({
   },
   greeting: {
     fontSize: 19,
-    color: '#666',
+    fontWeight: '600',
+    color: '#3D3D3D',
     marginBottom: 8,
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#0F8B8D',
+    color: '#017B5E',
   },
   languageButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E6F7F7',
+    backgroundColor: '#ECFDF6',
     padding: 8,
-    borderRadius: 20,
+    borderRadius: 10,
     gap: 4,
+    marginTop: -100,
   },
   languageText: {
-    color: '#0F8B8D',
+    color: '#3D3D3D',
     fontWeight: '500',
     fontSize: 16,
   },
@@ -337,26 +339,26 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 24,
-    backgroundColor: '#E6F7F7',
+    backgroundColor: '#ECFDF6',
     padding: 10,
     borderRadius: 8,
     flexWrap: 'wrap',
   },
   locationText: {
     marginLeft: 8,
-    color: '#0F8B8D',
+    color: '#3D3D3D',
     fontSize: 16,
     flex: 1,
   },
   weatherConditionContainer: {
-    backgroundColor: '#0F8B8D20',
+    backgroundColor: '#D0FBE7',
     borderRadius: 12,
     paddingHorizontal: 8,
     paddingVertical: 3,
     marginLeft: 8,
   },
   weatherConditionText: {
-    color: '#0F8B8D',
+    color: '#3D3D3D',
     fontSize: 14,
     fontWeight: '500',
   },
